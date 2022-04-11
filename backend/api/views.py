@@ -26,5 +26,5 @@ class Sender_API(APIView):
             sender = Sender.objects.get(sender=sendBy)
         except:
             return Response({"status": "error"}, status=status.HTTP_400_BAD_REQUEST)
-        from_header = (f"{sender.name} <{sender.sender.split('@')[0]}@mic.xyz>")
+        from_header = (f"{sender.name} <{sender.sender.split('@')[0]}@joinmic.xyz>")
         return Response({"status": "success", "data": from_header}, status=status.HTTP_200_OK)
