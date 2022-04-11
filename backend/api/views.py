@@ -4,7 +4,7 @@ from rest_framework import status
 
 from metadata.models import Account, Sender
 
-class Banner_API(APIView):
+class Redirect_API(APIView):
     authentication_classes = []
     permission_classes = []
     def get(self, request, sendBy=None, receiver=None):
@@ -15,4 +15,14 @@ class Banner_API(APIView):
             return Response({"status": "error"}, status=status.HTTP_400_BAD_REQUEST)
         if not sender in account.authorized.all():
             return Response({"status": "error"}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({"status": "success", "data": [sender.name, account.email]}, status=status.HTTP_200_OK)
+        return Response({"status": "success", "data": account.email}, status=status.HTTP_200_OK)
+
+class Sender_API(APIView):
+    authentication_classes = []
+    permission_classes = []
+    def get(self, request, sendBy=None):
+        try:
+            sender = Sender.objects.get(sender=sendBy)
+        except:
+            return Response({"status": "error"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"status": "success", "data": sender.name}, status=status.HTTP_200_OK)

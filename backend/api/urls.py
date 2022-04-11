@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import Banner_API
+from .views import Redirect_API, Sender_API
 
 urlpatterns = [
-    path('banner/<str:sendBy>/<str:receiver>', Banner_API.as_view()),
+    path('redirect/<str:sendBy>/<str:receiver>', Redirect_API.as_view()),
+    path('sender/<str:sendBy>', Sender_API.as_view()),
 ]
