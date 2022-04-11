@@ -10,12 +10,10 @@ def metadata(request, address):
     response_data = {}
     try:
         account = Account.objects.get(address=address)
-
         metadata = model_to_dict(account)
-        metadata['authorized'] = [t.domain for t in account.authorized.all()]
-
-        response_data["result"] = "valid"
-        response_data["message"] = metadata
+        del metadata["id"]
+        metadata['authorized'] = [t.address for t in account.authorized.all()]
+        response_data = metadata
     except Account.DoesNotExist:
         response_data["result"] = "error"
         response_data["message"] = "Wallet address don't have any Mic token"
