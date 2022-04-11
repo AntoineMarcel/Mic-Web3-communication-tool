@@ -1,13 +1,10 @@
 from django.db import models
 
-class Sender(models.Model):
-    name = models.CharField(max_length=100)
-    sender = models.EmailField(unique=True)
-
 class Account(models.Model):
-    address = models.CharField(max_length=100, unique=True)
+    address = models.EmailField(unique=True)
     email = models.EmailField()
-    authorized = models.ManyToManyField(Sender, blank=True)
+    authorized = models.ManyToManyField("self", blank=True, null=True, symmetrical=False)
+    name = models.CharField(max_length=100, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         self.address = self.address.lower()
