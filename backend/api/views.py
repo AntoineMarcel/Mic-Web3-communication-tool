@@ -23,6 +23,8 @@ class Redirect_API(APIView):
             sender_account = Account.objects.get(email=sendBy)
         except:
             return Response({"status": "error"}, status=status.HTTP_400_BAD_REQUEST)
+        if receiver_account.reachable == True:
+            return Response({"status": "success", "data": receiver_account.email}, status=status.HTTP_200_OK)
         if not sender_account in receiver_account.authorized.all():
             return Response({"status": "error"}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"status": "success", "data": receiver_account.email}, status=status.HTTP_200_OK)
@@ -53,8 +55,8 @@ class Exist_API(APIView):
         except:
             return Response({"status": "error"}, status=status.HTTP_400_BAD_REQUEST)
 class Manage_API(APIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    authentication_classes = []
+    permission_classes = []
 
     def post(self, request, sender=None, receiver=None, sig=None, email=None):
         try:
@@ -62,8 +64,6 @@ class Manage_API(APIView):
             sender_account = Account.objects.get(email=sender)
         except:
             return Response({"status": "Bad sender"}, status=status.HTTP_400_BAD_REQUEST)
-        if not sender_account.owner == request.user:
-            return Response({"status": "error", "message":"Not owner"}, status=status.HTTP_401_UNAUTHORIZED)
         try:
             w3 = Web3(Web3.HTTPProvider(""))
             message= encode_defunct(text=f"Authorize {sender} to send mails")
@@ -100,7 +100,6 @@ class Manage_API(APIView):
                         return Response({"status": "error", "message": response.json()[0]["msg"]}, status=status.HTTP_400_BAD_REQUEST)
                     receiver_account = Account.objects.create(address=mic_mail, email=email)
                 receiver_account.authorized.add(sender_account)
-                sender_account.authorized.add(receiver_account)
                 return Response({"status": "success"}, status=status.HTTP_200_OK)
             return Response({"status": "error", "message":"wrong sig"}, status=status.HTTP_400_BAD_REQUEST)
         except:
