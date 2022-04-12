@@ -58,7 +58,7 @@ class Manage_API(APIView):
     authentication_classes = []
     permission_classes = []
 
-    def post(self, request, sender=None, receiver=None, sig=None, email=None):
+    def get(self, request, sender=None, receiver=None, sig=None, email=None):
         try:
             sender = sender.lower()
             sender_account = Account.objects.get(email=sender)
@@ -69,9 +69,7 @@ class Manage_API(APIView):
             message= encode_defunct(text=f"Authorize {sender} to send mails")
             address = w3.eth.account.recover_message(message,signature=HexBytes(sig))
             mic_mail = f"{receiver.lower()}@joinmic.xyz"
-            print("test1")
             if (address == receiver):
-                print("test2")
                 if (email is None):
                     receiver_account = Account.objects.get(address=mic_mail)
                 else:
