@@ -55,7 +55,7 @@ class Status_API(APIView):
             sender_account = Account.objects.get(email=sender)
             if sender_account in receiver_account.authorized.all():
                 return Response({"status": "authorized"}, status=status.HTTP_200_OK)
-            return Response({"status": "not authorized"}, status=status.HTTP_200_OK)
+            return Response({"status": "not authorized"}, status=status.HTTP_100_CONTINUE)
         except:
             return Response({"status": "error"}, status=status.HTTP_400_BAD_REQUEST)
 class Manage_API(APIView):
