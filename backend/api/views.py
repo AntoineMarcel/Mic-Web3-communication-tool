@@ -43,15 +43,19 @@ class Sender_API(APIView):
             from_header = (f"<{sender_account.address}>")
         return Response({"status": "success", "data": from_header}, status=status.HTTP_200_OK)
 
-class Exist_API(APIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-    def get(self, request, receiver=None):
+class Status_API(APIView):
+    authentication_classes = []
+    permission_classes = []
+    def get(self, request, sender=None, receiver=None):
+        sender = sender.lower()
         receiver = receiver.lower()
         receiver = f"{receiver}@joinmic.xyz"
         try:
-            Account.objects.get(address=receiver)
-            return Response({"status": "success"}, status=status.HTTP_200_OK)
+            receiver_account = Account.objects.get(address=receiver)
+            sender_account = Account.objects.get(email=sender)
+            if sender_account in receiver_account.authorized.all():
+                return Response({"status": "authorized"}, status=status.HTTP_200_OK)
+            return Response({"status": "not authorized"}, status=status.HTTP_200_OK)
         except:
             return Response({"status": "error"}, status=status.HTTP_400_BAD_REQUEST)
 class Manage_API(APIView):

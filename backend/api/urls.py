@@ -6,5 +6,5 @@ urlpatterns = [
     path('sender/<str:sendBy>', Sender_API.as_view()),
     path('manage/<str:sender>/<str:receiver>/<str:sig>', Manage_API.as_view()),
     path('manage/<str:sender>/<str:receiver>/<str:sig>/<str:email>', Manage_API.as_view()),
-    path('exist/<str:receiver>', Exist_API.as_view()),
+    path('status/<str:sender>/<str:receiver>', Status_API.as_view()),
 ]
