@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import Exist_API, Manage_API, Redirect_API, Sender_API
+from .views import Status_API, Manage_API, Redirect_API, Sender_API
 
 urlpatterns = [
     path('redirect/<str:sendBy>/<str:receiver>', Redirect_API.as_view()),
