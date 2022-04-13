@@ -104,5 +104,5 @@ class Manage_API(APIView):
                 receiver_account.authorized.add(sender_account)
                 return Response({"status": "success"}, status=status.HTTP_200_OK)
             return Response({"status": "error", "message":"wrong sig"}, status=status.HTTP_400_BAD_REQUEST)
-        except:
-            return Response({"status": "error"}, status=status.HTTP_409_CONFLICT)
+        except Exception as e:
+                return Response({"status": str(e)}, status=status.HTTP_409_CONFLICT)
