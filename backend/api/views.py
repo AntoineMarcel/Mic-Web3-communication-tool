@@ -57,7 +57,7 @@ class Status_API(APIView):
                 return Response({"status": "authorized"}, status=status.HTTP_200_OK)
             return Response({"status": "not authorized"}, status=status.HTTP_200_OK)
         except:
-            return Response({"status": "error"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"status": "error"}, status=status.HTTP_200_OK)
 class Manage_API(APIView):
     authentication_classes = []
     permission_classes = []
