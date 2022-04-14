@@ -1,13 +1,12 @@
 $(document).ready(function () {
       var receiver = null
       var signer = null
-      var isConnected = false
 
       $("#micCloseModal").click(function () {
             $("#micModal").hide()
       });
 
-      $("#demo").click(function () {
+      $("#micConnect").click(function () {
             micConnectWallet();
       });
 
@@ -25,10 +24,9 @@ $(document).ready(function () {
                               authorize()
                         }
                         else if (status == "error") {
-                              $("#myModal").show()
+                              $("#micModal").show()
                         }
                         else {
-                              isConnected = true
                               micAfterConnected()
                         }
                   } catch (error) {
@@ -52,7 +50,6 @@ $(document).ready(function () {
                   await fetch(`https://app.joinmic.xyz/manage/${sender}/${receiver}/${sig}/${email}`, { method: "GET" })
             const status = ((await manage.json())["status"])
             if (status == "success") {
-                  isAuthorized = true
                   micAfterConnected()
             }
       }
