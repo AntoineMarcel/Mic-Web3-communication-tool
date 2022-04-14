@@ -20,11 +20,11 @@ class Redirect_API(APIView):
         sendBy = sendBy.lower()
         try:
             receiver_account = Account.objects.get(address=receiver)
+            if receiver_account.reachable == True:
+                return Response({"status": "success", "data": receiver_account.email}, status=status.HTTP_200_OK)
             sender_account = Account.objects.get(email=sendBy)
         except:
             return Response({"status": "error"}, status=status.HTTP_400_BAD_REQUEST)
-        if receiver_account.reachable == True:
-            return Response({"status": "success", "data": receiver_account.email}, status=status.HTTP_200_OK)
         if not sender_account in receiver_account.authorized.all():
             return Response({"status": "error"}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"status": "success", "data": receiver_account.email}, status=status.HTTP_200_OK)
