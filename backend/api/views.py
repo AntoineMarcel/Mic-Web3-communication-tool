@@ -7,6 +7,7 @@ from metadata.models import Account
 import requests
 import random
 import string
+from django.db.models import Q
 
 from web3 import Web3
 from hexbytes import HexBytes
@@ -19,7 +20,7 @@ class Redirect_API(APIView):
         receiver = receiver.lower()
         sendBy = sendBy.lower()
         try:
-            receiver_account = Account.objects.get(address=receiver)
+            receiver_account = Account.objects.get(Q(address=receiver) | Q(email=receiver))
             if receiver_account.reachable == True:
                 return Response({"status": "success", "data": receiver_account.email}, status=status.HTTP_200_OK)
             sender_account = Account.objects.get(email=sendBy)
