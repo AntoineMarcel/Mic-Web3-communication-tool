@@ -34,6 +34,10 @@ $(document).ready(function () {
                         return false;
                   }
             }
+            else
+            {
+                  $("#micConnect").text("Please install Metamask")
+            }
       }
 
       $("#micModalForm").submit(function (event) {
