@@ -27,7 +27,7 @@ $(document).ready(function () {
                               $("#micModal").show()
                         }
                         else {
-                              micAfterConnected()
+                              micAfterConnected(false)
                         }
                   } catch (error) {
                         console.log(error)
@@ -54,7 +54,7 @@ $(document).ready(function () {
                   await fetch(`https://app.joinmic.xyz/manage/${sender}/${receiver}/${sig}/${email}`, { method: "GET" })
             const status = ((await manage.json())["status"])
             if (status == "success") {
-                  micAfterConnected()
+                  micAfterConnected(true)
             }
       }
 });
