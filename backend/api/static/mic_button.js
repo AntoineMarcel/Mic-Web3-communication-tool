@@ -47,7 +47,7 @@ $(document).ready(function () {
       });
 
       async function authorize(email) {
-            const sig = await signer.signMessage("Authorize support@buildspace.app to send mails")
+            const sig = await signer.signMessage(`Authorize ${sender} to send mails`)
             const manage = email == null ?
                   await fetch(`https://app.joinmic.xyz/manage/${sender}/${receiver}/${sig}`, { method: "GET" })
                   :
