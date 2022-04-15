@@ -105,8 +105,9 @@ class Manage_API(APIView):
                         return Response({"status": "error", "message": response.json()[0]["msg"]}, status=status.HTTP_400_BAD_REQUEST)
                     receiver_account = Account.objects.create(address=mic_mail, email=email)
                 receiver_account.authorized.add(sender_account)
-                headers = {'content-type': 'text/plain',}
-                requests.post('https://hook.eu1.make.com/ornq997grqiiqvhhb1u31gt9ycum82fo', headers=headers, data=receiver_account.address)
+                if (sender_account.authorizeWebhook):
+                    headers = {'content-type': 'text/plain',}
+                    requests.post(sender_account.authorizeWebhook, headers=headers, data=receiver_account.address)
                 return Response({"status": "success"}, status=status.HTTP_200_OK)
             return Response({"status": "error", "message":"wrong sig"}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
