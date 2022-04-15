@@ -34,6 +34,8 @@ class Sender_API(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated, IsAdminUser]
     def get(self, request, sendBy=None):
+        sendBy = sendBy.lower()
+        sendBy = sendBy[ sendBy.find("<")+1 : sendBy.find(">") ]
         try:
             sender_account:Account = Account.objects.get(email=sendBy)
         except:
