@@ -1,16 +1,17 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from rest_framework.authentication import TokenAuthentication
-from metadata.models import Account
-import requests
 import random
 import string
 
-from web3 import Web3
-from hexbytes import HexBytes
+import requests
 from eth_account.messages import encode_defunct
+from hexbytes import HexBytes
+from metadata.models import Account
+from rest_framework import status
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from web3 import Web3
+
 
 class Redirect_API(APIView):
     authentication_classes = [TokenAuthentication]
@@ -76,6 +77,8 @@ class Manage_API(APIView):
             if (address == receiver):
                 if (email is None):
                     receiver_account = Account.objects.get(address=mic_mail)
+                    if (sender_account in receiver_account.authorized.all()):
+                        return Response({"status": "error", "message": "sender already authorized"}, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     if Account.objects.filter(address=mic_mail).count()>0:
                         return Response({"status": "error", "message":"This account already exist"}, status=status.HTTP_400_BAD_REQUEST)
@@ -102,6 +105,8 @@ class Manage_API(APIView):
                         return Response({"status": "error", "message": response.json()[0]["msg"]}, status=status.HTTP_400_BAD_REQUEST)
                     receiver_account = Account.objects.create(address=mic_mail, email=email)
                 receiver_account.authorized.add(sender_account)
+                headers = {'content-type': 'text/plain',}
+                requests.post('https://hook.eu1.make.com/ornq997grqiiqvhhb1u31gt9ycum82fo', headers=headers, data=receiver_account.address)
                 return Response({"status": "success"}, status=status.HTTP_200_OK)
             return Response({"status": "error", "message":"wrong sig"}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:

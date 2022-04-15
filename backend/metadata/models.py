@@ -6,6 +6,7 @@ class Account(models.Model):
     reachable = models.BooleanField(default=False)
     authorized = models.ManyToManyField("self", blank=True, null=True, symmetrical=False)
     name = models.CharField(max_length=100, blank=True, null=True)
+    authorizeWebhook = models.URLField(blank=True, null=True)
     owner = models.ForeignKey('auth.User', on_delete=models.CASCADE, blank=True, null=True)
 
     def save(self, *args, **kwargs):
