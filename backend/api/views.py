@@ -18,6 +18,7 @@ class Redirect_API(APIView):
     def get(self, request, sendBy:str=None, receiver:str=None):
         receiver = receiver.lower()
         sendBy = sendBy.lower()
+        sendBy = sendBy[ sendBy.find("<")+1 : sendBy.find(">") ]
         try:
             receiver_account = Account.objects.get(address=receiver)
             if receiver_account.reachable == True:
