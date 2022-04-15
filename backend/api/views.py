@@ -18,7 +18,6 @@ class Redirect_API(APIView):
     def get(self, request, sendBy:str=None, receiver:str=None):
         receiver = receiver.lower()
         sendBy = sendBy.lower()
-        sendBy = sendBy[ sendBy.find("<")+1 : sendBy.find(">") ]
         try:
             receiver_account = Account.objects.get(address=receiver)
             if receiver_account.reachable == True:
@@ -34,8 +33,6 @@ class Sender_API(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated, IsAdminUser]
     def get(self, request, sendBy=None):
-        sendBy = sendBy.lower()
-        sendBy = sendBy[ sendBy.find("<")+1 : sendBy.find(">") ]
         try:
             sender_account:Account = Account.objects.get(email=sendBy)
         except:
